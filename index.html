@@ -91,12 +91,86 @@
 </div>
 
 <script>
-    const allData = [
-        {w: "attribute", m: "～に帰せしめる", c: "社会", type: "vocab"},
-        {w: "inevitable", m: "避けられない", c: "科学", type: "vocab"},
-        {w: "virtually", m: "事実上/ほとんど", c: "社会", type: "vocab"},
+        const allData = [
+        // 【社会・人文・文化】
+        {w: "attribute A to B", m: "AをBのせいにする/おかげとする", c: "社会", type: "vocab"},
+        {w: "conformity", m: "同調/順応", c: "社会", type: "vocab"},
+        {w: "alienation", m: "疎外", c: "社会", type: "vocab"},
+        {w: "legitimate", m: "正当な/合理的な", c: "社会", type: "vocab"},
+        {w: "preservation", m: "保存/保護", c: "社会", type: "vocab"},
+        {w: "norm", m: "社会的規範", c: "社会", type: "vocab"},
+        {w: "subtle", m: "微細な/捉えがたい", c: "社会", type: "vocab"},
+        {w: "prejudice", m: "偏見", c: "社会", type: "vocab"},
+        {w: "distinction", m: "区別/相違", c: "社会", type: "vocab"},
+        {w: "perspective", m: "観点/視点/遠近法", c: "社会", type: "vocab"},
+        {w: "agency", m: "主体性/作用", c: "社会", type: "vocab"},
+        {w: "authority", m: "権威/当局", c: "社会", type: "vocab"},
+        {w: "autonomy", m: "自律性/自治", c: "社会", type: "vocab"},
+        {w: "bias", m: "偏り/先入観", c: "社会", type: "vocab"},
+        {w: "comprehensive", m: "包括的な/総合的な", c: "社会", type: "vocab"},
+        {w: "consensus", m: "合意", c: "社会", type: "vocab"},
+        {w: "consistent", m: "一貫した/矛盾しない", c: "社会", type: "vocab"},
+        {w: "derive from", m: "～に由来する", c: "社会", type: "vocab"},
+        {w: "indispensable", m: "不可欠な", c: "社会", type: "vocab"},
+        {w: "infrastructure", m: "社会基盤", c: "社会", type: "vocab"},
+
+        // 【科学・哲学・言語】
+        {w: "inevitable", m: "避けられない/必然的な", c: "科学", type: "vocab"},
+        {w: "subjective", m: "主観的な", c: "科学", type: "vocab"},
+        {w: "objective", m: "客観的な", c: "科学", type: "vocab"},
+        {w: "intrinsic", m: "本来備わっている", c: "科学", type: "vocab"},
+        {w: "abstract", m: "抽象的な", c: "科学", type: "vocab"},
+        {w: "hypothesis", m: "仮説", c: "科学", type: "vocab"},
+        {w: "paradigm", m: "理論的枠組み", c: "科学", type: "vocab"},
+        {w: "empirical", m: "経験的な/実証的な", c: "科学", type: "vocab"},
+        {w: "validity", m: "妥当性", c: "科学", type: "vocab"},
+        {w: "transformation", m: "変容/劇的な変化", c: "科学", type: "vocab"},
+        {w: "implication", m: "（将来的な）影響/含み", c: "科学", type: "vocab"},
+        {w: "manifest", m: "～を明らかにする/明白な", c: "科学", type: "vocab"},
+        {w: "stifle", m: "～を抑圧する", c: "科学", type: "vocab"},
+        {w: "substantial", m: "実質的な/かなりの", c: "科学", type: "vocab"},
+        {w: "evolution", m: "進化/発展", c: "科学", type: "vocab"},
+        {w: "sophisticated", m: "精巧な/洗練された", c: "科学", type: "vocab"},
+        {w: "superficial", m: "表面的な", c: "科学", type: "vocab"},
+        {w: "contradict", m: "～と矛盾する", c: "科学", type: "vocab"},
+        {w: "insight", m: "洞察", c: "科学", type: "vocab"},
+        {w: "profound", m: "深い/重大な", c: "科学", type: "vocab"},
+
+        // 【生物・医療・心理】
+        {w: "reconcile", m: "～を両立させる/和解させる", c: "生物", type: "vocab"},
+        {w: "sustainable", m: "持続可能な", c: "生物", type: "vocab"},
+        {w: "intervention", m: "介入/干渉", c: "生物", type: "vocab"},
+        {w: "vulnerable", m: "脆弱な/傷つきやすい", c: "生物", type: "vocab"},
+        {w: "extinction", m: "絶滅", c: "生物", type: "vocab"},
+        {w: "cognitive", m: "認知の", c: "生物", type: "vocab"},
+        {w: "mechanism", m: "仕組み/機構", c: "生物", type: "vocab"},
+        {w: "stimulus", m: "刺激", c: "生物", type: "vocab"},
+        {w: "inhibit", m: "～を抑制する", c: "生物", type: "vocab"},
+        {w: "resilience", m: "回復力/弾力性", c: "生物", type: "vocab"},
+
+        // 【京大和文英訳：こなれた日本語の英訳練習】
+        {w: "彼は、いわば「生きた辞書」のような人だ。", m: "He is, so to speak, a walking dictionary.", c: "京大和文英訳", type: "composition"},
+        {w: "読書が精神に与える影響は、食べ物が体に与える影響と同じだ。", m: "Reading is to the mind what food is to the body.", c: "京大和文英訳", type: "composition"},
+        {w: "どんなに一生懸命やっても、一日でそれを終えるのは無理だ。", m: "No matter how hard you try, it is impossible to finish it in a day.", c: "京大和文英訳", type: "composition"},
+        {w: "私たちは、空気を吸うのが当たり前だと思っている。", m: "We take it for granted that we breathe air.", c: "京大和文英訳", type: "composition"},
+        {w: "外国語を学ぶことは、新しい世界への扉を開くことだ。", m: "Learning a foreign language is like opening a door to a new world.", c: "京大和文英訳", type: "composition"},
+        {w: "科学が進歩しても、解明できない謎は残る。", m: "Even if science advances, there remain mysteries that cannot be solved.", c: "京大和文英訳", type: "composition"},
         {w: "日本語には、言葉にならない繊細な感情が込められている。", m: "Japanese is imbued with delicate emotions that are beyond words.", c: "京大和文英訳", type: "composition"},
+        {w: "現代社会において、プライバシーを守ることはますます困難になっている。", m: "In modern society, it is becoming increasingly difficult to protect one's privacy.", c: "京大和文英訳", type: "composition"},
+        {w: "歴史を学ぶことで、私たちは過去の過ちを繰り返さずに済む。", prevent: "Learning history prevents us from repeating the mistakes of the past.", c: "京大和文英訳", type: "composition"},
+        {w: "親切なことに、彼は駅までの道を教えてくれた。", m: "He was kind enough to show me the way to the station.", c: "京大和文英訳", type: "composition"},
+        {w: "その山頂に登るのに3時間かかった。", m: "It took three hours to climb to the top of the mountain.", c: "京大和文英訳", type: "composition"},
+        {w: "彼はそのニュースを聞いて驚きのあまり言葉を失った。", m: "He was so surprised at the news that he was at a loss for words.", c: "京大和文英訳", type: "composition"},
+        {w: "私は、昨日見た映画のことを一生忘れないだろう。", m: "I will never forget the movie I saw yesterday for the rest of my life.", c: "京大和文英訳", type: "composition"},
+        {w: "健康の価値は、失って初めてわかるものだ。", m: "It is not until we lose our health that we realize its value.", c: "京大和文英訳", type: "composition"},
+        {w: "彼女は医者というよりは、むしろ科学者だ。", m: "She is not so much a doctor as a scientist.", c: "京大和文英訳", type: "composition"},
+        {w: "君がそこに一人で行くのは危険すぎる。", m: "It is too dangerous for you to go there alone.", c: "京大和文英訳", type: "composition"},
+        {w: "どんなことがあっても、私は君の味方だ。", m: "No matter what happens, I will be on your side.", c: "京大和文英訳", type: "composition"},
+        {w: "彼はあまりにも忙しくて、休暇をとることができない。", m: "He is so busy that he cannot take a vacation.", c: "京大和文英訳", type: "composition"},
+        {w: "その計画は、実行に移すのが難しいとわかった。", m: "The plan proved difficult to put into practice.", c: "京大和文英訳", type: "composition"},
+        {w: "雨のおかげで、私たちは家にいなければならなかった。", m: "The rain forced us to stay at home.", c: "京大和文英訳", type: "composition"}
     ];
+
 
     let currentCategory = '社会';
     let filteredData = [];
