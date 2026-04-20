@@ -12,139 +12,161 @@
             --kyodai-blue: #002147; --accent: #ff4b2b; --bg: #0a0e14;
             --card-bg: #1c2128; --text: #f0f6fc; --gray: #8b949e;
         }
-        body {
-            margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column;
-        }
-        header {
-            padding: 40px 20px 20px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg));
-            font-size: 1.4rem; font-weight: 900; letter-spacing: 2px; color: #fff; text-shadow: 0 0 10px rgba(88,166,255,0.5);
-        }
-        .mode-switch {
-            display: flex; justify-content: center; gap: 10px; padding: 10px;
-        }
-        .m-btn {
-            background: rgba(255,255,255,0.1); border: 1px solid var(--gray); color: var(--text);
-            padding: 8px 15px; border-radius: 20px; font-size: 0.8rem;
-        }
-        .m-btn.active { background: var(--accent); border-color: var(--accent); font-weight: bold; }
-
-        .container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+        body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        header { padding: 45px 20px 10px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg)); font-weight: 900; letter-spacing: 2px; }
         
-        /* カードデザイン */
-        .card {
-            width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 30px;
-            padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-        .word-display { font-size: 2.5rem; font-weight: bold; margin-bottom: 20px; color: #fff; }
-        .sentence-display { text-align: left; line-height: 1.8; font-size: 1.1rem; color: var(--text); margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 15px; }
-        .underline { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 5px; font-weight: bold; }
-        
-        textarea {
-            width: 100%; background: #000; border: 1px solid #30363d; border-radius: 15px;
-            color: #fff; padding: 15px; font-size: 1rem; box-sizing: border-box; margin-bottom: 15px;
-        }
+        .nav-bar { display: flex; overflow-x: auto; padding: 10px; gap: 8px; background: rgba(0,0,0,0.3); border-bottom: 1px solid #30363d; -webkit-overflow-scrolling: touch; }
+        .m-btn { white-space: nowrap; background: rgba(255,255,255,0.05); border: 1px solid var(--gray); color: var(--gray); padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; }
+        .m-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
 
-        .ans-box { display: none; background: #2d333b; padding: 15px; border-radius: 15px; text-align: left; margin-top: 15px; }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 18px; border-radius: 15px; border: none; font-weight: bold; font-size: 1rem; }
-        .btn-main { background: var(--accent); color: #fff; }
-        .btn-sub { background: #30363d; color: var(--gray); }
+        .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+        .card { width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 25px; padding: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
+        
+        .label { font-size: 0.7rem; color: var(--accent); font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
+        .display-area { min-height: 120px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; }
+        
+        textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; padding: 15px; font-size: 1rem; box-sizing: border-box; margin-bottom: 15px; resize: none; }
+        .search-input { width: 100%; background: #1c2128; border: 1px solid #30363d; border-radius: 10px; color: #fff; padding: 12px; margin-bottom: 20px; box-sizing: border-box; }
+
+        .ans-box { display: none; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; text-align: left; margin-bottom: 15px; border-left: 3px solid var(--accent); }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .btn { padding: 15px 5px; border-radius: 12px; border: none; font-weight: bold; font-size: 0.85rem; color: #fff; }
+        
+        #review-view, #cat-view, #search-view, #master-view { display: none; width: 100%; max-width: 450px; }
+        .list-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #30363d; position: relative; }
+        .list-tag { font-size: 0.6rem; background: var(--kyodai-blue); color: #fff; padding: 2px 6px; border-radius: 4px; position: absolute; right: 10px; top: 10px; }
     </style>
 </head>
 <body>
 
 <header>DAWN OF WISDOM</header>
 
-<div class="mode-switch">
-    <button id="m-vocab" class="m-btn active" onclick="setMode('vocab')">単語帳</button>
-    <button id="m-wayaku" class="m-btn" onclick="setMode('wayaku')">和訳練習</button>
+<div class="nav-bar">
+    <button class="m-btn active" id="btn-main" onclick="showView('main')">学習</button>
+    <button class="m-btn" id="btn-search" onclick="showView('search')">辞書・検索</button>
+    <button class="m-btn" id="btn-cat" onclick="showView('cat')">カテゴリ</button>
+    <button class="m-btn" id="btn-review" onclick="showView('review')">要復習</button>
+    <button class="m-btn" id="btn-master" onclick="showView('master')">習得済み</button>
 </div>
 
 <div class="container">
-    <div class="card">
-        <div id="vocab-content">
-            <div id="target-word" class="word-display">Loading...</div>
-            <div id="vocab-ans" class="ans-box">
-                <div style="color: var(--accent); font-weight: bold;">意味</div>
-                <div id="meaning-text" style="font-size: 1.3rem; margin: 10px 0;"></div>
-                <div id="note-text" style="font-size: 0.9rem; color: var(--gray);"></div>
+    <div id="main-view" style="width:100%; max-width:450px;">
+        <div class="card">
+            <div id="mode-label" class="label">Vocabulary</div>
+            <div id="q-area" class="display-area"></div>
+            <textarea id="user-input" placeholder="訳を入力..."></textarea>
+            <div id="ans-box" class="ans-box">
+                <div style="font-size: 0.8rem; color: var(--accent);">解答例</div>
+                <div id="ans-text" style="font-size: 1.1rem; margin-top: 5px;"></div>
             </div>
             <div class="btn-group">
-                <button class="btn btn-sub" onclick="toggleAns()">答えを見る</button>
-                <button class="btn btn-main" onclick="nextWord(true)">✅ 習得</button>
-                <button class="btn btn-main" style="background:#444;" onclick="nextWord(false)">❌ 復習</button>
+                <button class="btn" style="background:#30363d;" onclick="toggleAns()">答え</button>
+                <button class="btn" style="background:var(--accent);" onclick="handleNext(true)">✅ 習得</button>
+                <button class="btn" style="background:#444;" onclick="handleNext(false)">❌ 復習</button>
             </div>
         </div>
+    </div>
 
-        <div id="wayaku-content" style="display:none;">
-            <div id="long-text" class="sentence-display"></div>
-            <textarea id="user-translation" rows="4" placeholder="下線部を和訳..."></textarea>
-            <div id="wayaku-ans" class="ans-box">
-                <div style="color: var(--accent); font-weight: bold;">模範解答</div>
-                <div id="model-ans" style="margin: 10px 0;"></div>
-            </div>
-            <div class="btn-group">
-                <button class="btn btn-sub" onclick="toggleWayakuAns()">解答表示</button>
-                <button class="btn btn-main" onclick="nextWayaku()">次の長文</button>
-            </div>
-        </div>
+    <div id="search-view">
+        <input type="text" class="search-input" id="search-box" placeholder="単語または意味で検索..." oninput="searchWords()">
+        <div id="search-results"></div>
+    </div>
+
+    <div id="cat-view">
+        <h3 style="color:var(--accent);">Category</h3>
+        <div class="list-item" onclick="setCategory('社会')">社会・文化</div>
+        <div class="list-item" onclick="setCategory('科学')">科学・哲学</div>
+        <div class="list-item" onclick="setCategory('京大和文英訳')">京大和文英訳</div>
+    </div>
+
+    <div id="review-view">
+        <h3 style="color:var(--accent);">Review List</h3>
+        <div id="review-container"></div>
+    </div>
+
+    <div id="master-view">
+        <h3 style="color:#4cd964;">Mastered List</h3>
+        <div id="master-container"></div>
     </div>
 </div>
 
 <script>
-    let mode = 'vocab';
-    const vocabData = [
-        {w: "inevitable", m: "避けられない/必然的な", n: "哲学・科学論で頻出。対義語はcontingent(偶然の)"},
-        {w: "attribute", m: "～に帰せしめる/～のせいにする", n: "attribute A to B の語順を瞬時に見抜くこと"},
-        {w: "virtually", m: "事実上/ほとんど", n: "「仮想の」と訳すと京大では減点対象"}
+    const allData = [
+        {w: "attribute", m: "～に帰せしめる", c: "社会", type: "vocab"},
+        {w: "inevitable", m: "避けられない", c: "科学", type: "vocab"},
+        {w: "virtually", m: "事実上/ほとんど", c: "社会", type: "vocab"},
+        {w: "日本語には、言葉にならない繊細な感情が込められている。", m: "Japanese is imbued with delicate emotions that are beyond words.", c: "京大和文英訳", type: "composition"},
     ];
 
-    const wayakuData = [
-        {
-            text: "The scientific revolution was not merely a collection of discoveries; it was a <span class='underline'>fundamental shift in the human relationship with the world</span>.",
-            ans: "人間と世界との関わりにおける根本的な転換"
-        },
-        {
-            text: "Language is a living entity that <span class='underline'>evolves in response to the changing needs of its speakers</span>.",
-            ans: "話し手の変化するニーズに応じて進化するものだ"
-        }
-    ];
+    let currentCategory = '社会';
+    let filteredData = [];
+    let idx = 0;
+    let reviewList = JSON.parse(localStorage.getItem('dawn_rev_v2')) || [];
+    let masterList = JSON.parse(localStorage.getItem('dawn_mast_v2')) || [];
 
-    let vIdx = 0, wIdx = 0;
+    function showView(view) {
+        ['main-view', 'cat-view', 'review-view', 'search-view', 'master-view'].forEach(v => document.getElementById(v).style.display = 'none');
+        document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(view + '-view').style.display = 'block';
+        document.getElementById('btn-' + view).classList.add('active');
+        
+        if(view === 'review') renderList('review-container', reviewList, true);
+        if(view === 'master') renderList('master-container', masterList, false);
+        if(view === 'search') searchWords();
+    }
 
-    function setMode(m) {
-        mode = m;
-        document.getElementById('m-vocab').classList.toggle('active', m === 'vocab');
-        document.getElementById('m-wayaku').classList.toggle('active', m === 'wayaku');
-        document.getElementById('vocab-content').style.display = m === 'vocab' ? 'block' : 'none';
-        document.getElementById('wayaku-content').style.display = m === 'wayaku' ? 'block' : 'none';
+    function setCategory(cat) {
+        currentCategory = cat;
+        filteredData = allData.filter(d => d.c === cat);
+        idx = 0;
+        showView('main');
         render();
     }
 
     function render() {
-        if(mode === 'vocab') {
-            const d = vocabData[vIdx];
-            document.getElementById('target-word').innerText = d.w;
-            document.getElementById('meaning-text').innerText = d.m;
-            document.getElementById('note-text').innerText = d.n;
-            document.getElementById('vocab-ans').style.display = 'none';
-        } else {
-            const d = wayakuData[wIdx];
-            document.getElementById('long-text').innerHTML = d.text;
-            document.getElementById('model-ans').innerText = d.ans;
-            document.getElementById('wayaku-ans').style.display = 'none';
-            document.getElementById('user-translation').value = '';
-        }
+        const d = filteredData[idx] || allData[0];
+        document.getElementById('mode-label').innerText = d.type === 'vocab' ? `Vocab (${d.c})` : `Comp (${d.c})`;
+        document.getElementById('q-area').innerText = d.w;
+        document.getElementById('ans-text').innerText = d.m;
+        document.getElementById('ans-box').style.display = 'none';
+        document.getElementById('user-input').value = '';
     }
 
-    function toggleAns() { document.getElementById('vocab-ans').style.display = 'block'; }
-    function toggleWayakuAns() { document.getElementById('wayaku-ans').style.display = 'block'; }
-    function nextWord(ok) { vIdx = (vIdx + 1) % vocabData.length; render(); }
-    function nextWayaku() { wIdx = (wIdx + 1) % wayakuData.length; render(); }
+    function handleNext(ok) {
+        const d = filteredData[idx];
+        if(ok) {
+            if(!masterList.find(r => r.w === d.w)) masterList.push(d);
+            reviewList = reviewList.filter(r => r.w !== d.w);
+        } else {
+            if(!reviewList.find(r => r.w === d.w)) reviewList.push(d);
+            masterList = masterList.filter(r => r.w !== d.w);
+        }
+        localStorage.setItem('dawn_rev_v2', JSON.stringify(reviewList));
+        localStorage.setItem('dawn_mast_v2', JSON.stringify(masterList));
+        idx = (idx + 1) % filteredData.length;
+        render();
+    }
 
-    setMode('vocab');
+    function searchWords() {
+        const query = document.getElementById('search-box').value.toLowerCase();
+        const results = allData.filter(d => d.w.toLowerCase().includes(query) || d.m.includes(query));
+        renderList('search-results', results, false);
+    }
+
+    function renderList(id, list, isReview) {
+        const container = document.getElementById(id);
+        container.innerHTML = list.length ? '' : '<p style="color:var(--gray);">データがありません</p>';
+        list.forEach(r => {
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = `<span class="list-tag">${r.c}</span><strong>${r.w}</strong><br><small>${r.m}</small>`;
+            container.appendChild(div);
+        });
+    }
+
+    function toggleAns() { document.getElementById('ans-box').style.display = 'block'; }
+
+    setCategory('社会');
 </script>
 </body>
 </html>
