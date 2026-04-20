@@ -100,8 +100,8 @@
 </div>
 
 <script>
-    //     const allData = [
-        // 【社会・人文・文化】
+    // ここにデータを追加していく
+        const allData = [
         {w: "attribute A to B", m: "AをBのせいにする/おかげとする", c: "社会", type: "vocab"},
         {w: "conformity", m: "同調/順応", c: "社会", type: "vocab"},
         {w: "alienation", m: "疎外", c: "社会", type: "vocab"},
@@ -122,8 +122,6 @@
         {w: "derive from", m: "～に由来する", c: "社会", type: "vocab"},
         {w: "indispensable", m: "不可欠な", c: "社会", type: "vocab"},
         {w: "infrastructure", m: "社会基盤", c: "社会", type: "vocab"},
-
-        // 【科学・哲学・言語】
         {w: "inevitable", m: "避けられない/必然的な", c: "科学", type: "vocab"},
         {w: "subjective", m: "主観的な", c: "科学", type: "vocab"},
         {w: "objective", m: "客観的な", c: "科学", type: "vocab"},
@@ -144,8 +142,6 @@
         {w: "contradict", m: "～と矛盾する", c: "科学", type: "vocab"},
         {w: "insight", m: "洞察", c: "科学", type: "vocab"},
         {w: "profound", m: "深い/重大な", c: "科学", type: "vocab"},
-
-        // 【生物・医療・心理】
         {w: "reconcile", m: "～を両立させる/和解させる", c: "生物", type: "vocab"},
         {w: "sustainable", m: "持続可能な", c: "生物", type: "vocab"},
         {w: "intervention", m: "介入/干渉", c: "生物", type: "vocab"},
@@ -156,8 +152,6 @@
         {w: "stimulus", m: "刺激", c: "生物", type: "vocab"},
         {w: "inhibit", m: "～を抑制する", c: "生物", type: "vocab"},
         {w: "resilience", m: "回復力/弾力性", c: "生物", type: "vocab"},
-
-        // 【京大和文英訳：こなれた日本語の英訳練習】
         {w: "彼は、いわば「生きた辞書」のような人だ。", m: "He is, so to speak, a walking dictionary.", c: "京大和文英訳", type: "composition"},
         {w: "読書が精神に与える影響は、食べ物が体に与える影響と同じだ。", m: "Reading is to the mind what food is to the body.", c: "京大和文英訳", type: "composition"},
         {w: "どんなに一生懸命やっても、一日でそれを終えるのは無理だ。", m: "No matter how hard you try, it is impossible to finish it in a day.", c: "京大和文英訳", type: "composition"},
@@ -166,7 +160,7 @@
         {w: "科学が進歩しても、解明できない謎は残る。", m: "Even if science advances, there remain mysteries that cannot be solved.", c: "京大和文英訳", type: "composition"},
         {w: "日本語には、言葉にならない繊細な感情が込められている。", m: "Japanese is imbued with delicate emotions that are beyond words.", c: "京大和文英訳", type: "composition"},
         {w: "現代社会において、プライバシーを守ることはますます困難になっている。", m: "In modern society, it is becoming increasingly difficult to protect one's privacy.", c: "京大和文英訳", type: "composition"},
-        {w: "歴史を学ぶことで、私たちは過去の過ちを繰り返さずに済む。", prevent: "Learning history prevents us from repeating the mistakes of the past.", c: "京大和文英訳", type: "composition"},
+        {w: "歴史を学ぶことで、私たちは過去の過ちを繰り返さずに済む。", m: "Learning history prevents us from repeating the mistakes of the past.", c: "京大和文英訳", type: "composition"},
         {w: "親切なことに、彼は駅までの道を教えてくれた。", m: "He was kind enough to show me the way to the station.", c: "京大和文英訳", type: "composition"},
         {w: "その山頂に登るのに3時間かかった。", m: "It took three hours to climb to the top of the mountain.", c: "京大和文英訳", type: "composition"},
         {w: "彼はそのニュースを聞いて驚きのあまり言葉を失った。", m: "He was so surprised at the news that he was at a loss for words.", c: "京大和文英訳", type: "composition"},
@@ -180,7 +174,6 @@
         {w: "雨のおかげで、私たちは家にいなければならなかった。", m: "The rain forced us to stay at home.", c: "京大和文英訳", type: "composition"}
     ];
 
-    
 
     let currentCategory = '社会';
     let filteredData = [];
