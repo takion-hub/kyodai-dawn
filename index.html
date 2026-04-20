@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" href="IMG_4112.jpeg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Dawn of Wisdom</title>
@@ -13,33 +13,26 @@
             --card-bg: #1c2128; --text: #f0f6fc; --gray: #8b949e;
         }
         body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        
-        /* ヘッダーとメニューボタン */
-        header { padding: 45px 20px 10px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg)); font-weight: 900; letter-spacing: 2px; position: relative; }
+        header { padding: 45px 20px 10px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg)); font-weight: 900; letter-spacing: 2px; position: relative; z-index: 10; }
         .menu-trigger { position: absolute; left: 15px; bottom: 12px; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
-
-        /* サイドメニュー（ドロワー） */
         .drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0d1117; z-index: 100; transition: 0.3s; box-shadow: 10px 0 30px rgba(0,0,0,0.5); padding-top: 60px; box-sizing: border-box; }
         .drawer.open { left: 0; }
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 99; }
         .drawer-overlay.show { display: block; }
         .drawer-item { padding: 15px 25px; border-bottom: 1px solid #30363d; font-size: 0.9rem; color: var(--gray); display: flex; align-items: center; }
         .drawer-item.active { color: white; background: rgba(255,75,43,0.1); border-left: 4px solid var(--accent); }
-
-        .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
         .card { width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 25px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        
         .label { font-size: 0.7rem; color: var(--accent); font-weight: bold; margin-bottom: 20px; letter-spacing: 1px; }
-        .display-area { min-height: 150px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin-bottom: 30px; line-height: 1.4; }
-        
+        .display-area { min-height: 150px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; margin-bottom: 30px; line-height: 1.4; }
         .ans-box { display: none; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 15px; text-align: left; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
         .btn { padding: 18px 5px; border-radius: 15px; border: none; font-weight: bold; font-size: 0.9rem; color: #fff; }
-        
         #review-view, #cat-view, #search-view, #master-view { display: none; width: 100%; max-width: 450px; padding-bottom: 50px; }
         .search-input { width: 100%; background: #1c2128; border: 1px solid #30363d; border-radius: 10px; color: #fff; padding: 15px; margin-bottom: 20px; box-sizing: border-box; font-size: 1rem; }
-        .list-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #30363d; position: relative; text-align: left;}
+        .list-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #30363d; position: relative; text-align: left; }
         .list-tag { font-size: 0.6rem; background: var(--kyodai-blue); padding: 2px 6px; border-radius: 4px; position: absolute; right: 10px; top: 10px; }
+        .undo-btn { position: absolute; right: 10px; bottom: 10px; background: #30363d; color: var(--text); border: none; border-radius: 8px; padding: 5px 10px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
@@ -74,12 +67,10 @@
             </div>
         </div>
     </div>
-
     <div id="search-view">
         <input type="text" class="search-input" id="search-box" placeholder="検索..." oninput="searchWords()">
         <div id="search-results"></div>
     </div>
-
     <div id="cat-view">
         <h3 style="color:var(--accent);">Categories</h3>
         <div class="list-item" onclick="setCategory('社会')">社会・人文</div>
@@ -87,12 +78,10 @@
         <div class="list-item" onclick="setCategory('生物')">生物・心理</div>
         <div class="list-item" onclick="setCategory('京大和文英訳')">京大和文英訳</div>
     </div>
-
     <div id="review-view">
         <h3 style="color:var(--accent);">Review List</h3>
         <div id="review-container"></div>
     </div>
-
     <div id="master-view">
         <h3 style="color:#4cd964;">Mastered List</h3>
         <div id="master-container"></div>
@@ -100,9 +89,10 @@
 </div>
 
 <script>
-    // ここにデータを追加していく
-        const allData = [
+    // 70語データは以前と同じものを保持
+    const allData = [
         {w: "attribute A to B", m: "AをBのせいにする/おかげとする", c: "社会", type: "vocab"},
+        // ... (ここに全70語が入ります)
         {w: "conformity", m: "同調/順応", c: "社会", type: "vocab"},
         {w: "alienation", m: "疎外", c: "社会", type: "vocab"},
         {w: "legitimate", m: "正当な/合理的な", c: "社会", type: "vocab"},
@@ -174,7 +164,6 @@
         {w: "雨のおかげで、私たちは家にいなければならなかった。", m: "The rain forced us to stay at home.", c: "京大和文英訳", type: "composition"}
     ];
 
-
     let currentCategory = '社会';
     let filteredData = [];
     let idx = 0;
@@ -190,8 +179,8 @@
         ['main-view', 'cat-view', 'review-view', 'search-view', 'master-view'].forEach(v => document.getElementById(v).style.display = 'none');
         document.getElementById(mode + '-view').style.display = 'block';
         toggleMenu();
-        if(mode === 'review') renderList('review-container', reviewList);
-        if(mode === 'master') renderList('master-container', masterList);
+        if(mode === 'review') renderList('review-container', reviewList, true);
+        if(mode === 'master') renderList('master-container', masterList, true);
         if(mode === 'search') searchWords();
     }
 
@@ -221,10 +210,22 @@
             if(!reviewList.find(r => r.w === d.w)) reviewList.push(d);
             masterList = masterList.filter(r => r.w !== d.w);
         }
-        localStorage.setItem('dawn_rev_v2', JSON.stringify(reviewList));
-        localStorage.setItem('dawn_mast_v2', JSON.stringify(masterList));
+        save();
         idx = (idx + 1) % filteredData.length;
         render();
+    }
+
+    function save() {
+        localStorage.setItem('dawn_rev_v2', JSON.stringify(reviewList));
+        localStorage.setItem('dawn_mast_v2', JSON.stringify(masterList));
+    }
+
+    function undoStatus(wordText) {
+        reviewList = reviewList.filter(r => r.w !== wordText);
+        masterList = masterList.filter(m => m.w !== wordText);
+        save();
+        if(document.getElementById('review-view').style.display === 'block') renderList('review-container', reviewList, true);
+        if(document.getElementById('master-view').style.display === 'block') renderList('master-container', masterList, true);
     }
 
     function toggleAns() { document.getElementById('ans-box').style.display = 'block'; }
@@ -232,16 +233,17 @@
     function searchWords() {
         const query = document.getElementById('search-box').value.toLowerCase();
         const results = allData.filter(d => d.w.toLowerCase().includes(query) || d.m.includes(query));
-        renderList('search-results', results);
+        renderList('search-results', results, false);
     }
 
-    function renderList(id, list) {
+    function renderList(id, list, showUndo) {
         const container = document.getElementById(id);
         container.innerHTML = list.length ? '' : '<p style="color:var(--gray); padding:20px;">データがありません</p>';
         list.forEach(r => {
             const div = document.createElement('div');
             div.className = 'list-item';
-            div.innerHTML = `<span class="list-tag">${r.c}</span><strong>${r.w}</strong><br><small>${r.m}</small>`;
+            let undoHtml = showUndo ? `<button class="undo-btn" onclick="undoStatus('${r.w.replace(/'/g, "\\'")}')">↩️ 戻す</button>` : '';
+            div.innerHTML = `<span class="list-tag">${r.c}</span><strong>${r.w}</strong><br><small>${r.m}</small>${undoHtml}`;
             container.appendChild(div);
         });
     }
