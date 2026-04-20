@@ -3,270 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="apple-touch-icon" href="IMG_4112.jpeg">
+    <link rel="apple-touch-icon" href="IMG_4521.jpeg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Dawn of Wisdom</title>
+    <title>Dawn of Wisdom: SUCCESS TRACKER</title>
     <style>
         :root {
             --kyodai-blue: #002147; --accent: #ff4b2b; --bg: #0a0e14;
             --card-bg: #1c2128; --text: #f0f6fc; --gray: #8b949e;
         }
-        body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        header { padding: 45px 20px 10px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg)); font-weight: 900; letter-spacing: 2px; position: relative; z-index: 10; }
-        .menu-trigger { position: absolute; left: 15px; bottom: 12px; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
+        body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
         
-        .drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0d1117; z-index: 100; transition: 0.3s; box-shadow: 10px 0 30px rgba(0,0,0,0.5); padding-top: 60px; box-sizing: border-box; }
+        /* Countdown Header */
+        header { padding: 35px 20px 10px; text-align: center; background: linear-gradient(to bottom, var(--kyodai-blue), var(--bg)); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .countdown { font-size: 0.7rem; color: var(--accent); font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
+
+        .container { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Progress Dashboard */
+        .dashboard { width: 100%; max-width: 480px; background: var(--card-bg); border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid #30363d; }
+        .stat-row { margin-bottom: 15px; }
+        .stat-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
+        .progress-bar { width: 100%; height: 8px; background: #0d1117; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; transition: width 0.5s ease-in-out; }
+
+        .menu-btn { position: absolute; left: 15px; top: 45px; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
+
+        .drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0d1117; z-index: 100; transition: 0.3s; padding-top: 60px; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
         .drawer.open { left: 0; }
-        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 99; }
-        .drawer-overlay.show { display: block; }
-        .drawer-item { padding: 15px 25px; border-bottom: 1px solid #30363d; font-size: 0.9rem; color: var(--gray); display: flex; align-items: center; }
-        
-        .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .card { width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 25px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        
-        .label { font-size: 0.7rem; color: var(--accent); font-weight: bold; margin-bottom: 20px; letter-spacing: 1px; }
-        .display-area { min-height: 150px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; margin-bottom: 30px; line-height: 1.4; }
-        
-        .ans-box { display: none; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 15px; text-align: left; margin-bottom: 20px; border-left: 4px solid var(--accent); }
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .btn { padding: 18px 5px; border-radius: 15px; border: none; font-weight: bold; font-size: 0.9rem; color: #fff; }
-        
-        #review-view, #cat-view, #search-view, #master-view { display: none; width: 100%; max-width: 450px; padding-bottom: 50px; }
-        .search-input { width: 100%; background: #1c2128; border: 1px solid #30363d; border-radius: 10px; color: #fff; padding: 15px; margin-bottom: 10px; box-sizing: border-box; font-size: 1rem; }
-        
-        .list-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #30363d; position: relative; text-align: left; }
-        .list-tag { font-size: 0.6rem; background: var(--kyodai-blue); padding: 2px 6px; border-radius: 4px; position: absolute; right: 10px; top: 10px; }
-        
-        .undo-btn { position: absolute; right: 10px; bottom: 10px; background: #30363d; color: var(--text); border: none; border-radius: 8px; padding: 5px 10px; font-size: 0.7rem; cursor: pointer; }
-        .quick-tag { background: #30363d; color: var(--text); border: none; border-radius: 8px; padding: 6px 12px; font-size: 0.75rem; cursor: pointer; }
+        .drawer-item { padding: 18px 25px; border-bottom: 1px solid #30363d; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <button class="menu-trigger" onclick="toggleMenu()">☰</button>
-    DAWN OF WISDOM
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div style="font-weight: 900; letter-spacing: 2px;">DAWN OF WISDOM</div>
+    <div id="countdown" class="countdown">GOAL: KYOTO UNIVERSITY</div>
 </header>
 
-<div id="overlay" class="drawer-overlay" onclick="toggleMenu()"></div>
-<div id="drawer" class="drawer">
-    <div class="drawer-item" onclick="changeMode('main')">学習</div>
-    <div class="drawer-item" onclick="changeMode('search')">辞書・検索</div>
-    <div class="drawer-item" onclick="changeMode('cat')">カテゴリ選択</div>
-    <div class="drawer-item" onclick="changeMode('review')">要復習リスト</div>
-    <div class="drawer-item" onclick="changeMode('master')">習得済みリスト</div>
+<div class="container">
+    <div class="dashboard">
+        <div style="font-size: 0.9rem; font-weight: bold; margin-bottom: 20px; color: var(--accent);">📊 LEARNING PROGRESS</div>
+        
+        <div class="stat-row">
+            <div class="stat-label"><span>CORE VOCAB (3000)</span><span id="vocab-pc">0%</span></div>
+            <div class="progress-bar"><div id="vocab-fill" class="progress-fill" style="width: 0%; background: var(--kyodai-blue);"></div></div>
+        </div>
+        
+        <div class="stat-row">
+            <div class="stat-label"><span>MINE DISARM (100)</span><span id="mine-pc">0%</span></div>
+            <div class="progress-bar"><div id="mine-fill" class="progress-fill" style="width: 0%; background: #ff4d4d;"></div></div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-label"><span>EX-KYODAI (300)</span><span id="ex-pc">0%</span></div>
+            <div class="progress-bar"><div id="ex-fill" class="progress-fill" style="width: 0%; background: #c5a059;"></div></div>
+        </div>
+    </div>
+
+    <button style="width: 100%; max-width: 480px; padding: 20px; border-radius: 15px; background: var(--accent); color: white; border: none; font-weight: bold; font-size: 1rem; cursor: pointer;" onclick="resumeStudy()">
+        RESUME STUDYING
+    </button>
 </div>
 
-<div class="container">
-    <div id="main-view" style="width:100%; max-width:450px;">
-        <div class="card">
-            <div id="mode-label" class="label">LOADING...</div>
-            <div id="q-area" class="display-area"></div>
-            <div id="ans-box" class="ans-box">
-                <div style="font-size: 0.8rem; color: var(--accent); margin-bottom: 5px;">解答例・解説</div>
-                <div id="ans-text" style="font-size: 1.2rem;"></div>
-            </div>
-            <div class="btn-group">
-                <button class="btn" style="background:#30363d;" onclick="toggleAns()">答え</button>
-                <button class="btn" style="background:var(--accent);" onclick="handleNext(true)">✅ 習得</button>
-                <button class="btn" style="background:#444;" onclick="handleNext(false)">❌ 復習</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="search-view">
-        <input type="text" class="search-input" id="search-box" placeholder="単語・意味・タグで検索..." oninput="searchWords()">
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
-            <button class="quick-tag" onclick="quickSearch('社会')">#社会</button>
-            <button class="quick-tag" onclick="quickSearch('科学')">#科学</button>
-            <button class="quick-tag" onclick="quickSearch('生物')">#生物</button>
-            <button class="quick-tag" onclick="quickSearch('京大和文英訳')">#和文英訳</button>
-            <button class="quick-tag" style="background:var(--accent);" onclick="quickSearch('')">クリア</button>
-        </div>
-        <div id="search-results"></div>
-    </div>
-
-    <div id="cat-view">
-        <h3 style="color:var(--accent);">Categories</h3>
-        <div class="list-item" onclick="setCategory('社会')">社会・人文</div>
-        <div class="list-item" onclick="setCategory('科学')">科学・哲学</div>
-        <div class="list-item" onclick="setCategory('生物')">生物・心理</div>
-        <div class="list-item" onclick="setCategory('京大和文英訳')">京大和文英訳</div>
-    </div>
-
-    <div id="review-view"><h3 style="color:var(--accent);">Review List</h3><div id="review-container"></div></div>
-    <div id="master-view"><h3 style="color:#4cd964;">Mastered List</h3><div id="master-container"></div></div>
+<div id="drawer" class="drawer">
+    <div class="drawer-item" onclick="location.reload()">🏠 ダッシュボード</div>
+    <div class="drawer-item">📖 通常単語帳</div>
+    <div class="drawer-item">⚠️ 地雷単語解体</div>
+    <div class="drawer-item">🔍 精緻な和訳トレーニング</div>
+    <div class="drawer-item">✍️ 合格フレーズ英作</div>
 </div>
 
 <script>
-    const allData = [
-        {w: "attribute A to B", m: "AをBのせいにする/おかげとする", c: "社会", type: "vocab"},
-        {w: "conformity", m: "同調/順応", c: "社会", type: "vocab"},
-        {w: "alienation", m: "疎外", c: "社会", type: "vocab"},
-        {w: "legitimate", m: "正当な/合理的な", c: "社会", type: "vocab"},
-        {w: "preservation", m: "保存/保護", c: "社会", type: "vocab"},
-        {w: "norm", m: "社会的規範", c: "社会", type: "vocab"},
-        {w: "subtle", m: "微細な/捉えがたい", c: "社会", type: "vocab"},
-        {w: "prejudice", m: "偏見", c: "社会", type: "vocab"},
-        {w: "distinction", m: "区別/相違", c: "社会", type: "vocab"},
-        {w: "perspective", m: "観点/視点/遠近法", c: "社会", type: "vocab"},
-        {w: "agency", m: "主体性/作用", c: "社会", type: "vocab"},
-        {w: "authority", m: "権威/当局", c: "社会", type: "vocab"},
-        {w: "autonomy", m: "自律性/自治", c: "社会", type: "vocab"},
-        {w: "bias", m: "偏り/先入観", c: "社会", type: "vocab"},
-        {w: "comprehensive", m: "包括的な/総合的な", c: "社会", type: "vocab"},
-        {w: "consensus", m: "合意", c: "社会", type: "vocab"},
-        {w: "consistent", m: "一貫した/矛盾しない", c: "社会", type: "vocab"},
-        {w: "derive from", m: "～に由来する", c: "社会", type: "vocab"},
-        {w: "indispensable", m: "不可欠な", c: "社会", type: "vocab"},
-        {w: "infrastructure", m: "社会基盤", c: "社会", type: "vocab"},
-        {w: "inevitable", m: "避けられない/必然的な", c: "科学", type: "vocab"},
-        {w: "subjective", m: "主観的な", c: "科学", type: "vocab"},
-        {w: "objective", m: "客観的な", c: "科学", type: "vocab"},
-        {w: "intrinsic", m: "本来備わっている", c: "科学", type: "vocab"},
-        {w: "abstract", m: "抽象的な", c: "科学", type: "vocab"},
-        {w: "hypothesis", m: "仮説", c: "科学", type: "vocab"},
-        {w: "paradigm", m: "理論的枠組み", c: "科学", type: "vocab"},
-        {w: "empirical", m: "経験的な/実証的な", c: "科学", type: "vocab"},
-        {w: "validity", m: "妥当性", c: "科学", type: "vocab"},
-        {w: "transformation", m: "変容/劇的な変化", c: "科学", type: "vocab"},
-        {w: "implication", m: "（将来的な）影響/含み", c: "科学", type: "vocab"},
-        {w: "manifest", m: "～を明らかにする/明白な", c: "科学", type: "vocab"},
-        {w: "stifle", m: "～を抑圧する", c: "科学", type: "vocab"},
-        {w: "substantial", m: "実質的な/かなりの", c: "科学", type: "vocab"},
-        {w: "evolution", m: "進化/発展", c: "科学", type: "vocab"},
-        {w: "sophisticated", m: "精巧な/洗練された", c: "科学", type: "vocab"},
-        {w: "superficial", m: "表面的な", c: "科学", type: "vocab"},
-        {w: "contradict", m: "～と矛盾する", c: "科学", type: "vocab"},
-        {w: "insight", m: "洞察", c: "科学", type: "vocab"},
-        {w: "profound", m: "深い/重大な", c: "科学", type: "vocab"},
-        {w: "reconcile", m: "～を両立させる/和解させる", c: "生物", type: "vocab"},
-        {w: "sustainable", m: "持続可能な", c: "生物", type: "vocab"},
-        {w: "intervention", m: "介入/干渉", c: "生物", type: "vocab"},
-        {w: "vulnerable", m: "脆弱な/傷つきやすい", c: "生物", type: "vocab"},
-        {w: "extinction", m: "絶滅", c: "生物", type: "vocab"},
-        {w: "cognitive", m: "認知の", c: "生物", type: "vocab"},
-        {w: "mechanism", m: "仕組み/機構", c: "生物", type: "vocab"},
-        {w: "stimulus", m: "刺激", c: "生物", type: "vocab"},
-        {w: "inhibit", m: "～を抑制する", c: "生物", type: "vocab"},
-        {w: "resilience", m: "回復力/弾力性", c: "生物", type: "vocab"},
-        {w: "彼は、いわば「生きた辞書」のような人だ。", m: "He is, so to speak, a walking dictionary.", c: "京大和文英訳", type: "composition"},
-        {w: "読書が精神に与える影響は、食べ物が体に与える影響と同じだ。", m: "Reading is to the mind what food is to the body.", c: "京大和文英訳", type: "composition"},
-        {w: "どんなに一生懸命やっても、一日でそれを終えるのは無理だ。", m: "No matter how hard you try, it is impossible to finish it in a day.", c: "京大和文英訳", type: "composition"},
-        {w: "私たちは、空気を吸うのが当たり前だと思っている。", m: "We take it for granted that we breathe air.", c: "京大和文英訳", type: "composition"},
-        {w: "外国語を学ぶことは、新しい世界への扉を開くことだ。", m: "Learning a foreign language is like opening a door to a new world.", c: "京大和文英訳", type: "composition"},
-        {w: "科学が進歩しても、解明できない謎は残る。", m: "Even if science advances, there remain mysteries that cannot be solved.", c: "京大和文英訳", type: "composition"},
-        {w: "日本語には、言葉にならない繊細な感情が込められている。", m: "Japanese is imbued with delicate emotions that are beyond words.", c: "京大和文英訳", type: "composition"},
-        {w: "現代社会において、プライバシーを守ることはますます困難になっている。", m: "In modern society, it is becoming increasingly difficult to protect one's privacy.", c: "京大和文英訳", type: "composition"},
-        {w: "歴史を学ぶことで、私たちは過去の過ちを繰り返さずに済む。", m: "Learning history prevents us from repeating the mistakes of the past.", c: "京大和文英訳", type: "composition"},
-        {w: "親切なことに、彼は駅までの道を教えてくれた。", m: "He was kind enough to show me the way to the station.", c: "京大和文英訳", type: "composition"},
-        {w: "その山頂に登るのに3時間かかった。", m: "It took three hours to climb to the top of the mountain.", c: "京大和文英訳", type: "composition"},
-        {w: "彼はそのニュースを聞いて驚きのあまり言葉を失った。", m: "He was so surprised at the news that he was at a loss for words.", c: "京大和文英訳", type: "composition"},
-        {w: "私は、昨日見た映画のことを一生忘れないだろう。", m: "I will never forget the movie I saw yesterday for the rest of my life.", c: "京大和文英訳", type: "composition"},
-        {w: "健康の価値は、失って初めてわかるものだ。", m: "It is not until we lose our health that we realize its value.", c: "京大和文英訳", type: "composition"},
-        {w: "彼女は医者というよりは、むしろ科学者だ。", m: "She is not so much a doctor as a scientist.", c: "京大和文英訳", type: "composition"},
-        {w: "君がそこに一人で行くのは危険すぎる。", m: "It is too dangerous for you to go there alone.", c: "京大和文英訳", type: "composition"},
-        {w: "どんなことがあっても、私は君の味方だ。", m: "No matter what happens, I will be on your side.", c: "京大和文英訳", type: "composition"},
-        {w: "彼はあまりにも忙しくて、休暇をとることができない。", m: "He is so busy that he cannot take a vacation.", c: "京大和文英訳", type: "composition"},
-        {w: "その計画は、実行に移すのが難しいとわかった。", m: "The plan proved difficult to put into practice.", c: "京大和文英訳", type: "composition"},
-        {w: "雨のおかげで、私たちは家にいなければならなかった。", m: "The rain forced us to stay at home.", c: "京大和文英訳", type: "composition"}
-    ];
-
-    let currentCategory = '社会';
-    let filteredData = [];
-    let idx = 0;
-    let reviewList = JSON.parse(localStorage.getItem('dawn_rev_v2')) || [];
-    let masterList = JSON.parse(localStorage.getItem('dawn_mast_v2')) || [];
-
-    function toggleMenu() {
-        document.getElementById('drawer').classList.toggle('open');
-        document.getElementById('overlay').classList.toggle('show');
+    // 京大入試日（仮：2027年2月25日）までのカウントダウン
+    function updateCountdown() {
+        const target = new Date('2027/02/25 09:00:00').getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById('countdown').innerText = `EXAM IN: ${days} DAYS`;
     }
 
-    function changeMode(mode) {
-        ['main-view', 'cat-view', 'review-view', 'search-view', 'master-view'].forEach(v => document.getElementById(v).style.display = 'none');
-        document.getElementById(mode + '-view').style.display = 'block';
-        toggleMenu();
-        if(mode === 'review') renderList('review-container', reviewList, true);
-        if(mode === 'master') renderList('master-container', masterList, true);
-        if(mode === 'search') searchWords();
+    // ローカルストレージから進捗を取得して反映
+    function loadProgress() {
+        const stats = {
+            vocab: JSON.parse(localStorage.getItem('stats_vocab') || "0"),
+            mine: JSON.parse(localStorage.getItem('stats_mine') || "0"),
+            ex: JSON.parse(localStorage.getItem('stats_ex') || "0")
+        };
+
+        // UI反映
+        document.getElementById('vocab-fill').style.width = stats.vocab + "%";
+        document.getElementById('vocab-pc').innerText = stats.vocab + "%";
+        
+        document.getElementById('mine-fill').style.width = stats.mine + "%";
+        document.getElementById('mine-pc').innerText = stats.mine + "%";
+        
+        document.getElementById('ex-fill').style.width = stats.ex + "%";
+        document.getElementById('ex-pc').innerText = stats.ex + "%";
     }
 
-    function setCategory(cat) {
-        currentCategory = cat;
-        filteredData = allData.filter(d => d.c === cat);
-        if(filteredData.length === 0) filteredData = [allData[0]];
-        idx = 0;
-        changeMode('main');
-        render();
-    }
+    function toggleMenu() { document.getElementById('drawer').classList.toggle('open'); }
+    function resumeStudy() { alert("学習モードへ戻ります。"); }
 
-    function render() {
-        const d = filteredData[idx];
-        document.getElementById('mode-label').innerText = `${d.c} - ${idx + 1}/${filteredData.length}`;
-        document.getElementById('q-area').innerText = d.w;
-        document.getElementById('ans-text').innerText = d.m;
-        document.getElementById('ans-box').style.display = 'none';
-    }
-
-    function handleNext(ok) {
-        const d = filteredData[idx];
-        if(ok) {
-            if(!masterList.find(r => r.w === d.w)) masterList.push(d);
-            reviewList = reviewList.filter(r => r.w !== d.w);
-        } else {
-            if(!reviewList.find(r => r.w === d.w)) reviewList.push(d);
-            masterList = masterList.filter(r => r.w !== d.w);
-        }
-        save();
-        idx = (idx + 1) % filteredData.length;
-        render();
-    }
-
-    function save() {
-        localStorage.setItem('dawn_rev_v2', JSON.stringify(reviewList));
-        localStorage.setItem('dawn_mast_v2', JSON.stringify(masterList));
-    }
-
-    function undoStatus(wordText) {
-        reviewList = reviewList.filter(r => r.w !== wordText);
-        masterList = masterList.filter(m => m.w !== wordText);
-        save();
-        if(document.getElementById('review-view').style.display === 'block') renderList('review-container', reviewList, true);
-        if(document.getElementById('master-view').style.display === 'block') renderList('master-container', masterList, true);
-    }
-
-    function toggleAns() { document.getElementById('ans-box').style.display = 'block'; }
-
-    function quickSearch(tag) {
-        document.getElementById('search-box').value = tag;
-        searchWords();
-    }
-
-    function searchWords() {
-        const query = document.getElementById('search-box').value.toLowerCase();
-        const results = allData.filter(d => 
-            d.w.toLowerCase().includes(query) || 
-            d.m.includes(query) || 
-            d.c.toLowerCase().includes(query)
-        );
-        renderList('search-results', results, false);
-    }
-
-    function renderList(id, list, showUndo) {
-        const container = document.getElementById(id);
-        container.innerHTML = list.length ? '' : '<p style="color:var(--gray); padding:20px;">データがありません</p>';
-        list.forEach(r => {
-            const div = document.createElement('div');
-            div.className = 'list-item';
-            let undoHtml = showUndo ? `<button class="undo-btn" onclick="undoStatus('${r.w.replace(/'/g, "\\'")}')">↩️ 戻す</button>` : '';
-            div.innerHTML = `<span class="list-tag">${r.c}</span><strong>${r.w}</strong><br><small>${r.m}</small>${undoHtml}`;
-            container.appendChild(div);
-        });
-    }
-
-    setCategory('社会');
+    updateCountdown();
+    loadProgress();
 </script>
 </body>
 </html>
