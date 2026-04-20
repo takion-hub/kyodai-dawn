@@ -15,24 +15,31 @@
         body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         header { padding: 45px 20px 10px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg)); font-weight: 900; letter-spacing: 2px; position: relative; z-index: 10; }
         .menu-trigger { position: absolute; left: 15px; bottom: 12px; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
+        
         .drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0d1117; z-index: 100; transition: 0.3s; box-shadow: 10px 0 30px rgba(0,0,0,0.5); padding-top: 60px; box-sizing: border-box; }
         .drawer.open { left: 0; }
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 99; }
         .drawer-overlay.show { display: block; }
         .drawer-item { padding: 15px 25px; border-bottom: 1px solid #30363d; font-size: 0.9rem; color: var(--gray); display: flex; align-items: center; }
-        .drawer-item.active { color: white; background: rgba(255,75,43,0.1); border-left: 4px solid var(--accent); }
+        
         .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
         .card { width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 25px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        
         .label { font-size: 0.7rem; color: var(--accent); font-weight: bold; margin-bottom: 20px; letter-spacing: 1px; }
         .display-area { min-height: 150px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: bold; margin-bottom: 30px; line-height: 1.4; }
+        
         .ans-box { display: none; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 15px; text-align: left; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
         .btn { padding: 18px 5px; border-radius: 15px; border: none; font-weight: bold; font-size: 0.9rem; color: #fff; }
+        
         #review-view, #cat-view, #search-view, #master-view { display: none; width: 100%; max-width: 450px; padding-bottom: 50px; }
-        .search-input { width: 100%; background: #1c2128; border: 1px solid #30363d; border-radius: 10px; color: #fff; padding: 15px; margin-bottom: 20px; box-sizing: border-box; font-size: 1rem; }
+        .search-input { width: 100%; background: #1c2128; border: 1px solid #30363d; border-radius: 10px; color: #fff; padding: 15px; margin-bottom: 10px; box-sizing: border-box; font-size: 1rem; }
+        
         .list-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #30363d; position: relative; text-align: left; }
         .list-tag { font-size: 0.6rem; background: var(--kyodai-blue); padding: 2px 6px; border-radius: 4px; position: absolute; right: 10px; top: 10px; }
-        .undo-btn { position: absolute; right: 10px; bottom: 10px; background: #30363d; color: var(--text); border: none; border-radius: 8px; padding: 5px 10px; font-size: 0.7rem; }
+        
+        .undo-btn { position: absolute; right: 10px; bottom: 10px; background: #30363d; color: var(--text); border: none; border-radius: 8px; padding: 5px 10px; font-size: 0.7rem; cursor: pointer; }
+        .quick-tag { background: #30363d; color: var(--text); border: none; border-radius: 8px; padding: 6px 12px; font-size: 0.75rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -67,10 +74,19 @@
             </div>
         </div>
     </div>
+
     <div id="search-view">
-        <input type="text" class="search-input" id="search-box" placeholder="検索..." oninput="searchWords()">
+        <input type="text" class="search-input" id="search-box" placeholder="単語・意味・タグで検索..." oninput="searchWords()">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+            <button class="quick-tag" onclick="quickSearch('社会')">#社会</button>
+            <button class="quick-tag" onclick="quickSearch('科学')">#科学</button>
+            <button class="quick-tag" onclick="quickSearch('生物')">#生物</button>
+            <button class="quick-tag" onclick="quickSearch('京大和文英訳')">#和文英訳</button>
+            <button class="quick-tag" style="background:var(--accent);" onclick="quickSearch('')">クリア</button>
+        </div>
         <div id="search-results"></div>
     </div>
+
     <div id="cat-view">
         <h3 style="color:var(--accent);">Categories</h3>
         <div class="list-item" onclick="setCategory('社会')">社会・人文</div>
@@ -78,21 +94,14 @@
         <div class="list-item" onclick="setCategory('生物')">生物・心理</div>
         <div class="list-item" onclick="setCategory('京大和文英訳')">京大和文英訳</div>
     </div>
-    <div id="review-view">
-        <h3 style="color:var(--accent);">Review List</h3>
-        <div id="review-container"></div>
-    </div>
-    <div id="master-view">
-        <h3 style="color:#4cd964;">Mastered List</h3>
-        <div id="master-container"></div>
-    </div>
+
+    <div id="review-view"><h3 style="color:var(--accent);">Review List</h3><div id="review-container"></div></div>
+    <div id="master-view"><h3 style="color:#4cd964;">Mastered List</h3><div id="master-container"></div></div>
 </div>
 
 <script>
-    // 70語データは以前と同じものを保持
     const allData = [
         {w: "attribute A to B", m: "AをBのせいにする/おかげとする", c: "社会", type: "vocab"},
-        // ... (ここに全70語が入ります)
         {w: "conformity", m: "同調/順応", c: "社会", type: "vocab"},
         {w: "alienation", m: "疎外", c: "社会", type: "vocab"},
         {w: "legitimate", m: "正当な/合理的な", c: "社会", type: "vocab"},
@@ -230,9 +239,18 @@
 
     function toggleAns() { document.getElementById('ans-box').style.display = 'block'; }
 
+    function quickSearch(tag) {
+        document.getElementById('search-box').value = tag;
+        searchWords();
+    }
+
     function searchWords() {
         const query = document.getElementById('search-box').value.toLowerCase();
-        const results = allData.filter(d => d.w.toLowerCase().includes(query) || d.m.includes(query));
+        const results = allData.filter(d => 
+            d.w.toLowerCase().includes(query) || 
+            d.m.includes(query) || 
+            d.c.toLowerCase().includes(query)
+        );
         renderList('search-results', results, false);
     }
 
