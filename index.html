@@ -13,51 +13,59 @@
             --card-bg: #1c2128; --text: #f0f6fc; --gray: #8b949e;
         }
         body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        header { padding: 45px 20px 10px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg)); font-weight: 900; letter-spacing: 2px; }
         
-        .nav-bar { display: flex; overflow-x: auto; padding: 10px; gap: 8px; background: rgba(0,0,0,0.3); border-bottom: 1px solid #30363d; -webkit-overflow-scrolling: touch; }
-        .m-btn { white-space: nowrap; background: rgba(255,255,255,0.05); border: 1px solid var(--gray); color: var(--gray); padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; }
-        .m-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+        /* ヘッダーとメニューボタン */
+        header { padding: 45px 20px 10px; text-align: center; background: linear-gradient(to bottom, #002147, var(--bg)); font-weight: 900; letter-spacing: 2px; position: relative; }
+        .menu-trigger { position: absolute; left: 15px; bottom: 12px; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
 
-        .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
-        .card { width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 25px; padding: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
-        
-        .label { font-size: 0.7rem; color: var(--accent); font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
-        .display-area { min-height: 120px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; }
-        
-        textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; padding: 15px; font-size: 1rem; box-sizing: border-box; margin-bottom: 15px; resize: none; }
-        .search-input { width: 100%; background: #1c2128; border: 1px solid #30363d; border-radius: 10px; color: #fff; padding: 12px; margin-bottom: 20px; box-sizing: border-box; }
+        /* サイドメニュー（ドロワー） */
+        .drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0d1117; z-index: 100; transition: 0.3s; box-shadow: 10px 0 30px rgba(0,0,0,0.5); padding-top: 60px; box-sizing: border-box; }
+        .drawer.open { left: 0; }
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 99; }
+        .drawer-overlay.show { display: block; }
+        .drawer-item { padding: 15px 25px; border-bottom: 1px solid #30363d; font-size: 0.9rem; color: var(--gray); display: flex; align-items: center; }
+        .drawer-item.active { color: white; background: rgba(255,75,43,0.1); border-left: 4px solid var(--accent); }
 
-        .ans-box { display: none; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; text-align: left; margin-bottom: 15px; border-left: 3px solid var(--accent); }
+        .container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .card { width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 25px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        
+        .label { font-size: 0.7rem; color: var(--accent); font-weight: bold; margin-bottom: 20px; letter-spacing: 1px; }
+        .display-area { min-height: 150px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin-bottom: 30px; line-height: 1.4; }
+        
+        .ans-box { display: none; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 15px; text-align: left; margin-bottom: 20px; border-left: 4px solid var(--accent); }
         .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .btn { padding: 15px 5px; border-radius: 12px; border: none; font-weight: bold; font-size: 0.85rem; color: #fff; }
+        .btn { padding: 18px 5px; border-radius: 15px; border: none; font-weight: bold; font-size: 0.9rem; color: #fff; }
         
-        #review-view, #cat-view, #search-view, #master-view { display: none; width: 100%; max-width: 450px; }
-        .list-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #30363d; position: relative; }
-        .list-tag { font-size: 0.6rem; background: var(--kyodai-blue); color: #fff; padding: 2px 6px; border-radius: 4px; position: absolute; right: 10px; top: 10px; }
+        #review-view, #cat-view, #search-view, #master-view { display: none; width: 100%; max-width: 450px; padding-bottom: 50px; }
+        .search-input { width: 100%; background: #1c2128; border: 1px solid #30363d; border-radius: 10px; color: #fff; padding: 15px; margin-bottom: 20px; box-sizing: border-box; font-size: 1rem; }
+        .list-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #30363d; position: relative; text-align: left;}
+        .list-tag { font-size: 0.6rem; background: var(--kyodai-blue); padding: 2px 6px; border-radius: 4px; position: absolute; right: 10px; top: 10px; }
     </style>
 </head>
 <body>
 
-<header>DAWN OF WISDOM</header>
+<header>
+    <button class="menu-trigger" onclick="toggleMenu()">☰</button>
+    DAWN OF WISDOM
+</header>
 
-<div class="nav-bar">
-    <button class="m-btn active" id="btn-main" onclick="showView('main')">学習</button>
-    <button class="m-btn" id="btn-search" onclick="showView('search')">辞書・検索</button>
-    <button class="m-btn" id="btn-cat" onclick="showView('cat')">カテゴリ</button>
-    <button class="m-btn" id="btn-review" onclick="showView('review')">要復習</button>
-    <button class="m-btn" id="btn-master" onclick="showView('master')">習得済み</button>
+<div id="overlay" class="drawer-overlay" onclick="toggleMenu()"></div>
+<div id="drawer" class="drawer">
+    <div class="drawer-item" onclick="changeMode('main')">学習</div>
+    <div class="drawer-item" onclick="changeMode('search')">辞書・検索</div>
+    <div class="drawer-item" onclick="changeMode('cat')">カテゴリ選択</div>
+    <div class="drawer-item" onclick="changeMode('review')">要復習リスト</div>
+    <div class="drawer-item" onclick="changeMode('master')">習得済みリスト</div>
 </div>
 
 <div class="container">
     <div id="main-view" style="width:100%; max-width:450px;">
         <div class="card">
-            <div id="mode-label" class="label">Vocabulary</div>
+            <div id="mode-label" class="label">LOADING...</div>
             <div id="q-area" class="display-area"></div>
-            <textarea id="user-input" placeholder="訳を入力..."></textarea>
             <div id="ans-box" class="ans-box">
-                <div style="font-size: 0.8rem; color: var(--accent);">解答例</div>
-                <div id="ans-text" style="font-size: 1.1rem; margin-top: 5px;"></div>
+                <div style="font-size: 0.8rem; color: var(--accent); margin-bottom: 5px;">解答例・解説</div>
+                <div id="ans-text" style="font-size: 1.2rem;"></div>
             </div>
             <div class="btn-group">
                 <button class="btn" style="background:#30363d;" onclick="toggleAns()">答え</button>
@@ -68,14 +76,15 @@
     </div>
 
     <div id="search-view">
-        <input type="text" class="search-input" id="search-box" placeholder="単語または意味で検索..." oninput="searchWords()">
+        <input type="text" class="search-input" id="search-box" placeholder="検索..." oninput="searchWords()">
         <div id="search-results"></div>
     </div>
 
     <div id="cat-view">
-        <h3 style="color:var(--accent);">Category</h3>
-        <div class="list-item" onclick="setCategory('社会')">社会・文化</div>
+        <h3 style="color:var(--accent);">Categories</h3>
+        <div class="list-item" onclick="setCategory('社会')">社会・人文</div>
         <div class="list-item" onclick="setCategory('科学')">科学・哲学</div>
+        <div class="list-item" onclick="setCategory('生物')">生物・心理</div>
         <div class="list-item" onclick="setCategory('京大和文英訳')">京大和文英訳</div>
     </div>
 
@@ -91,7 +100,7 @@
 </div>
 
 <script>
-        const allData = [
+    //     const allData = [
         // 【社会・人文・文化】
         {w: "attribute A to B", m: "AをBのせいにする/おかげとする", c: "社会", type: "vocab"},
         {w: "conformity", m: "同調/順応", c: "社会", type: "vocab"},
@@ -171,6 +180,7 @@
         {w: "雨のおかげで、私たちは家にいなければならなかった。", m: "The rain forced us to stay at home.", c: "京大和文英訳", type: "composition"}
     ];
 
+    
 
     let currentCategory = '社会';
     let filteredData = [];
@@ -178,32 +188,35 @@
     let reviewList = JSON.parse(localStorage.getItem('dawn_rev_v2')) || [];
     let masterList = JSON.parse(localStorage.getItem('dawn_mast_v2')) || [];
 
-    function showView(view) {
+    function toggleMenu() {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    }
+
+    function changeMode(mode) {
         ['main-view', 'cat-view', 'review-view', 'search-view', 'master-view'].forEach(v => document.getElementById(v).style.display = 'none');
-        document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(view + '-view').style.display = 'block';
-        document.getElementById('btn-' + view).classList.add('active');
-        
-        if(view === 'review') renderList('review-container', reviewList, true);
-        if(view === 'master') renderList('master-container', masterList, false);
-        if(view === 'search') searchWords();
+        document.getElementById(mode + '-view').style.display = 'block';
+        toggleMenu();
+        if(mode === 'review') renderList('review-container', reviewList);
+        if(mode === 'master') renderList('master-container', masterList);
+        if(mode === 'search') searchWords();
     }
 
     function setCategory(cat) {
         currentCategory = cat;
         filteredData = allData.filter(d => d.c === cat);
+        if(filteredData.length === 0) filteredData = [allData[0]];
         idx = 0;
-        showView('main');
+        changeMode('main');
         render();
     }
 
     function render() {
-        const d = filteredData[idx] || allData[0];
-        document.getElementById('mode-label').innerText = d.type === 'vocab' ? `Vocab (${d.c})` : `Comp (${d.c})`;
+        const d = filteredData[idx];
+        document.getElementById('mode-label').innerText = `${d.c} - ${idx + 1}/${filteredData.length}`;
         document.getElementById('q-area').innerText = d.w;
         document.getElementById('ans-text').innerText = d.m;
         document.getElementById('ans-box').style.display = 'none';
-        document.getElementById('user-input').value = '';
     }
 
     function handleNext(ok) {
@@ -221,15 +234,17 @@
         render();
     }
 
+    function toggleAns() { document.getElementById('ans-box').style.display = 'block'; }
+
     function searchWords() {
         const query = document.getElementById('search-box').value.toLowerCase();
         const results = allData.filter(d => d.w.toLowerCase().includes(query) || d.m.includes(query));
-        renderList('search-results', results, false);
+        renderList('search-results', results);
     }
 
-    function renderList(id, list, isReview) {
+    function renderList(id, list) {
         const container = document.getElementById(id);
-        container.innerHTML = list.length ? '' : '<p style="color:var(--gray);">データがありません</p>';
+        container.innerHTML = list.length ? '' : '<p style="color:var(--gray); padding:20px;">データがありません</p>';
         list.forEach(r => {
             const div = document.createElement('div');
             div.className = 'list-item';
@@ -237,8 +252,6 @@
             container.appendChild(div);
         });
     }
-
-    function toggleAns() { document.getElementById('ans-box').style.display = 'block'; }
 
     setCategory('社会');
 </script>
