@@ -2,113 +2,196 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Mastery 3000 - Professional</title>
     <link rel="apple-touch-icon" href="IMG_4521.jpeg">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Dawn of Wisdom: SUCCESS TRACKER</title>
+    <link rel="icon" href="IMG_4521.jpeg">
     <style>
         :root {
-            --kyodai-blue: #002147; --accent: #ff4b2b; --bg: #0a0e14;
-            --card-bg: #1c2128; --text: #f0f6fc; --gray: #8b949e;
+            --bg-dark: #050a14;
+            --bg-card: #0a192f;
+            --accent: #64ffda;
+            --text-main: #ccd6f6;
+            --sidebar-w: 300px;
         }
-        body { margin: 0; font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
-        
-        /* Countdown Header */
-        header { padding: 35px 20px 10px; text-align: center; background: linear-gradient(to bottom, var(--kyodai-blue), var(--bg)); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .countdown { font-size: 0.7rem; color: var(--accent); font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
 
-        .container { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        
-        /* Progress Dashboard */
-        .dashboard { width: 100%; max-width: 480px; background: var(--card-bg); border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid #30363d; }
-        .stat-row { margin-bottom: 15px; }
-        .stat-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
-        .progress-bar { width: 100%; height: 8px; background: #0d1117; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; transition: width 0.5s ease-in-out; }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0; background: var(--bg-dark); color: var(--text-main);
+            display: flex; height: 100vh; overflow: hidden;
+        }
 
-        .menu-btn { position: absolute; left: 15px; top: 45px; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
+        /* サイドバー */
+        #sidebar {
+            width: var(--sidebar-w); height: 100%; background: #020c1b;
+            border-right: 1px solid #233554; transition: 0.3s;
+            position: fixed; z-index: 2000; overflow-y: auto; display: flex; flex-direction: column;
+        }
+        #sidebar.hidden { transform: translateX(-100%); }
 
-        .drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0d1117; z-index: 100; transition: 0.3s; padding-top: 60px; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
-        .drawer.open { left: 0; }
-        .drawer-item { padding: 18px 25px; border-bottom: 1px solid #30363d; cursor: pointer; }
+        .sidebar-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: #112240; }
+        .app-icon { width: 45px; height: 45px; border-radius: 10px; border: 1px solid var(--accent); }
+
+        .sidebar-scroll { flex: 1; overflow-y: auto; padding: 20px; }
+
+        /* 検索・タグ選択UI */
+        .search-input {
+            width: 100%; padding: 10px; background: #112240; border: 1px solid #233554;
+            color: white; border-radius: 5px; margin-bottom: 15px; box-sizing: border-box;
+        }
+        .tag-filter-list { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 20px; }
+        .tag-chip {
+            font-size: 0.7rem; padding: 3px 8px; border: 1px solid #233554;
+            border-radius: 3px; cursor: pointer; transition: 0.2s;
+        }
+        .tag-chip.active { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
+
+        /* メインエリア */
+        #main {
+            flex: 1; margin-left: var(--sidebar-w); transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #main.expanded { margin-left: 0; }
+
+        .card {
+            background: var(--bg-card); width: 85%; max-width: 600px;
+            padding: 50px 30px; border-radius: 25px; text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6); position: relative;
+            border: 1px solid #233554;
+        }
+
+        .tag-container { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .tag { background: rgba(100, 255, 218, 0.05); color: var(--accent); padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; border: 1px solid var(--accent); }
+
+        .display-main { font-size: 3.8rem; font-weight: 900; color: white; margin: 15px 0; }
+        .display-sub { font-size: 1.5rem; color: var(--text-sub); margin-bottom: 40px; cursor: pointer; min-height: 1.5em;}
+        .display-sub.blur { filter: blur(12px); opacity: 0.3; }
+
+        .btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn.active { background: var(--accent); color: var(--bg-dark); }
+        .menu-toggle { position: fixed; top: 20px; left: 20px; z-index: 1000; }
     </style>
 </head>
 <body>
 
-<header>
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <div style="font-weight: 900; letter-spacing: 2px;">DAWN OF WISDOM</div>
-    <div id="countdown" class="countdown">GOAL: KYOTO UNIVERSITY</div>
-</header>
-
-<div class="container">
-    <div class="dashboard">
-        <div style="font-size: 0.9rem; font-weight: bold; margin-bottom: 20px; color: var(--accent);">📊 LEARNING PROGRESS</div>
-        
-        <div class="stat-row">
-            <div class="stat-label"><span>CORE VOCAB (3000)</span><span id="vocab-pc">0%</span></div>
-            <div class="progress-bar"><div id="vocab-fill" class="progress-fill" style="width: 0%; background: var(--kyodai-blue);"></div></div>
-        </div>
-        
-        <div class="stat-row">
-            <div class="stat-label"><span>MINE DISARM (100)</span><span id="mine-pc">0%</span></div>
-            <div class="progress-bar"><div id="mine-fill" class="progress-fill" style="width: 0%; background: #ff4d4d;"></div></div>
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <img src="IMG_4521.jpeg" class="app-icon" alt="icon">
+            <h3 style="margin:0; font-size:0.9rem">MASTER 3000</h3>
+            <button class="btn" style="border:none; font-size:1.5rem" onclick="toggleSidebar()">×</button>
         </div>
 
-        <div class="stat-row">
-            <div class="stat-label"><span>EX-KYODAI (300)</span><span id="ex-pc">0%</span></div>
-            <div class="progress-bar"><div id="ex-fill" class="progress-fill" style="width: 0%; background: #c5a059;"></div></div>
+        <div class="sidebar-scroll">
+            <p style="font-size: 0.8rem; color: var(--accent);">単語・意味で検索</p>
+            <input type="text" class="search-input" placeholder="Search..." oninput="handleSearch(this.value)">
+
+            <p style="font-size: 0.8rem; color: var(--accent);">タグで絞り込み</p>
+            <div class="tag-filter-list" id="tag-filters">
+                </div>
+
+            <hr style="border:0; border-top:1px solid #233554; margin:20px 0;">
+            <div style="font-size: 0.8rem;">学習中のリスト: <span id="list-count">0</span> 語</div>
+            <div style="font-size: 0.8rem;">現在の位置: <span id="current-pos">0</span></div>
         </div>
-    </div>
+    </nav>
 
-    <button style="width: 100%; max-width: 480px; padding: 20px; border-radius: 15px; background: var(--accent); color: white; border: none; font-weight: bold; font-size: 1rem; cursor: pointer;" onclick="resumeStudy()">
-        RESUME STUDYING
-    </button>
-</div>
+    <button id="open-btn" class="btn menu-toggle" style="display:none" onclick="toggleSidebar()">☰ MENU</button>
 
-<div id="drawer" class="drawer">
-    <div class="drawer-item" onclick="location.reload()">🏠 ダッシュボード</div>
-    <div class="drawer-item">📖 通常単語帳</div>
-    <div class="drawer-item">⚠️ 地雷単語解体</div>
-    <div class="drawer-item">🔍 精緻な和訳トレーニング</div>
-    <div class="drawer-item">✍️ 合格フレーズ英作</div>
-</div>
+    <main id="main">
+        <div class="card">
+            <div class="tag-container" id="tag-box"></div>
+            <div class="display-main" id="text-main">...</div>
+            <div class="display-sub blur" id="text-sub" onclick="this.classList.toggle('blur')">Tap to Reveal</div>
+            
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                <button class="btn" onclick="move(-1)">PREV</button>
+                <button class="btn" onclick="move(1)">NEXT</button>
+            </div>
+        </div>
+    </main>
 
-<script>
-    // 京大入試日（仮：2027年2月25日）までのカウントダウン
-    function updateCountdown() {
-        const target = new Date('2027/02/25 09:00:00').getTime();
-        const now = new Date().getTime();
-        const diff = target - now;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        document.getElementById('countdown').innerText = `EXAM IN: ${days} DAYS`;
-    }
+    <script src="data.js"></script>
+    <script>
+        let filteredWords = [...words];
+        let currentIdx = 0;
+        let activeTags = new Set();
+        let searchQuery = "";
 
-    // ローカルストレージから進捗を取得して反映
-    function loadProgress() {
-        const stats = {
-            vocab: JSON.parse(localStorage.getItem('stats_vocab') || "0"),
-            mine: JSON.parse(localStorage.getItem('stats_mine') || "0"),
-            ex: JSON.parse(localStorage.getItem('stats_ex') || "0")
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('hidden');
+            document.getElementById('main').classList.toggle('expanded');
+            document.getElementById('open-btn').style.display = 
+                document.getElementById('sidebar').classList.contains('hidden') ? 'block' : 'none';
+        }
+
+        // タグフィルターの初期化
+        function initTagFilters() {
+            const allTags = new Set();
+            words.forEach(w => w.t.forEach(t => allTags.add(t)));
+            const container = document.getElementById('tag-filters');
+            
+            Array.from(allTags).sort().forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'tag-chip';
+                span.textContent = tag;
+                span.onclick = () => toggleTag(tag, span);
+                container.appendChild(span);
+            });
+        }
+
+        function toggleTag(tag, el) {
+            if(activeTags.has(tag)) activeTags.delete(tag);
+            else activeTags.add(tag);
+            el.classList.toggle('active');
+            applyFilters();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.toLowerCase();
+            applyFilters();
+        }
+
+        function applyFilters() {
+            filteredWords = words.filter(w => {
+                const matchesSearch = w.w.toLowerCase().includes(searchQuery) || w.m.toLowerCase().includes(searchQuery);
+                const matchesTags = activeTags.size === 0 || w.t.some(t => activeTags.has(t));
+                return matchesSearch && matchesTags;
+            });
+            currentIdx = 0;
+            render();
+        }
+
+        function render() {
+            const displayList = filteredWords.length > 0 ? filteredWords : [{w: "No Result", m: "条件を変えてください", t: []}];
+            const data = displayList[currentIdx];
+            
+            document.getElementById('text-main').textContent = data.w;
+            document.getElementById('text-sub').textContent = data.m;
+            document.getElementById('text-sub').classList.add('blur');
+            
+            const tagBox = document.getElementById('tag-box');
+            tagBox.innerHTML = '';
+            data.t.forEach(t => {
+                const s = document.createElement('span');
+                s.className = 'tag';
+                s.textContent = t;
+                tagBox.appendChild(s);
+            });
+
+            document.getElementById('list-count').textContent = filteredWords.length;
+            document.getElementById('current-pos').textContent = filteredWords.length > 0 ? currentIdx + 1 : 0;
+        }
+
+        function move(step) {
+            if(filteredWords.length === 0) return;
+            currentIdx = (currentIdx + step + filteredWords.length) % filteredWords.length;
+            render();
+        }
+
+        window.onload = () => {
+            initTagFilters();
+            render();
         };
-
-        // UI反映
-        document.getElementById('vocab-fill').style.width = stats.vocab + "%";
-        document.getElementById('vocab-pc').innerText = stats.vocab + "%";
-        
-        document.getElementById('mine-fill').style.width = stats.mine + "%";
-        document.getElementById('mine-pc').innerText = stats.mine + "%";
-        
-        document.getElementById('ex-fill').style.width = stats.ex + "%";
-        document.getElementById('ex-pc').innerText = stats.ex + "%";
-    }
-
-    function toggleMenu() { document.getElementById('drawer').classList.toggle('open'); }
-    function resumeStudy() { alert("学習モードへ戻ります。"); }
-
-    updateCountdown();
-    loadProgress();
-</script>
+    </script>
 </body>
 </html>
