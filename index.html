@@ -3,177 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastery 3000 Pro</title>
+    <title>Mastery 3000 - Pro Studio</title>
     <link rel="apple-touch-icon" href="IMG_4521.jpeg">
     <link rel="icon" href="IMG_4521.jpeg">
     <style>
         :root {
-            --bg-dark: #050a14;
-            --bg-card: #0a192f;
-            --accent: #64ffda;
-            --gold: #ffd700;
-            --danger: #ff4d4d;
-            --text-main: #ccd6f6;
-            --text-sub: #8892b0;
-            --sidebar-w: 320px;
+            --bg-dark: #050a14; --bg-card: #0a192f; --accent: #64ffda;
+            --gold: #ffd700; --text-main: #ccd6f6; --text-sub: #8892b0; --sidebar-w: 300px;
         }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            margin: 0; background: var(--bg-dark); color: var(--text-main);
-            display: flex; height: 100vh; overflow: hidden;
-        }
-
+        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        
         /* サイドバー */
-        #sidebar {
-            width: var(--sidebar-w); height: 100%; background: #020c1b;
-            border-right: 1px solid #233554; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: fixed; z-index: 2000; display: flex; flex-direction: column;
-        }
+        #sidebar { width: var(--sidebar-w); height: 100%; background: #020c1b; border-right: 1px solid #233554; transition: 0.3s; position: fixed; z-index: 2000; display: flex; flex-direction: column; }
         #sidebar.hidden { transform: translateX(-100%); }
-
-        .sidebar-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: #112240; }
-        .app-icon { width: 45px; height: 45px; border-radius: 10px; border: 1px solid var(--accent); object-fit: cover; }
-
         .sidebar-scroll { flex: 1; overflow-y: auto; padding: 20px; }
+
+        /* 入試カウントダウン */
+        .countdown-box { background: rgba(100, 255, 218, 0.1); padding: 10px; border-radius: 8px; border: 1px solid var(--accent); text-align: center; margin-bottom: 20px; }
+        .days-num { font-size: 1.5rem; font-weight: bold; color: var(--accent); }
+
+        /* 画面切り替え */
+        #view-study, #view-list { flex: 1; transition: 0.3s; display: none; height: 100vh; overflow-y: auto; }
+        #view-study.active, #view-list.active { display: flex; flex-direction: column; }
+        #main { flex: 1; margin-left: var(--sidebar-w); transition: 0.3s; }
+        #main.expanded { margin-left: 0; }
+
+        /* 学習カード */
+        .card-container { flex: 1; display: flex; align-items: center; justify-content: center; }
+        .card { background: var(--bg-card); width: 85%; max-width: 550px; padding: 40px; border-radius: 25px; text-align: center; position: relative; border: 1px solid #233554; }
+        .word-main { font-size: 3.5rem; font-weight: 900; color: white; margin: 15px 0; }
+        .word-sub { font-size: 1.4rem; color: var(--text-sub); cursor: pointer; min-height: 1.5em; margin-bottom: 20px; }
+        .word-sub.blur { filter: blur(15px); opacity: 0.2; }
 
         /* サジェスト検索 */
         .search-container { position: relative; margin-bottom: 20px; }
-        .search-input {
-            width: 100%; padding: 12px; background: #112240; border: 1px solid var(--accent);
-            color: white; border-radius: 5px; box-sizing: border-box; outline: none;
-        }
-        #suggest-list {
-            display: none; position: absolute; top: 100%; left: 0; width: 100%;
-            background: #112240; border: 1px solid var(--accent); border-top: none;
-            max-height: 250px; overflow-y: auto; z-index: 3000; border-radius: 0 0 5px 5px;
-        }
-        .suggest-item { padding: 10px; border-bottom: 1px solid #233554; cursor: pointer; }
+        .search-input { width: 100%; padding: 10px; background: #112240; border: 1px solid var(--accent); color: white; border-radius: 5px; outline: none; }
+        #suggest-list { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #112240; border: 1px solid var(--accent); z-index: 3000; border-radius: 0 0 5px 5px; max-height: 200px; overflow-y: auto; }
+        .suggest-item { padding: 10px; border-bottom: 1px solid #233554; cursor: pointer; font-size: 0.85rem; }
         .suggest-item:hover { background: rgba(100, 255, 218, 0.1); }
 
-        /* 入試カウントダウン */
-        .exam-countdown {
-            background: rgba(100, 255, 218, 0.05); padding: 15px; margin-bottom: 20px;
-            border-radius: 10px; border: 1px solid var(--accent); text-align: center;
-        }
-        .countdown-days { font-size: 1.8rem; font-weight: bold; color: var(--accent); }
+        /* リスト表示 */
+        .list-header { padding: 20px; background: #112240; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--accent); }
+        .word-item { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid #233554; gap: 15px; }
+        .word-info { flex: 1; }
+        .tag-small { font-size: 0.65rem; color: var(--accent); border: 1px solid var(--accent); padding: 1px 5px; border-radius: 3px; margin-right: 4px; }
 
-        /* メイン */
-        #main {
-            flex: 1; margin-left: var(--sidebar-w); transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        #main.expanded { margin-left: 0; }
-
-        .card {
-            background: var(--bg-card); width: 85%; max-width: 550px;
-            padding: 40px; border-radius: 25px; text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6); position: relative;
-            border: 1px solid #233554;
-        }
-        .card.mastered { border-color: var(--gold); }
-        .card.mine { border-color: var(--danger); box-shadow: 0 0 20px rgba(255,77,77,0.2); }
-
-        .status-badge {
-            position: absolute; top: 20px; right: 25px; font-size: 0.7rem; font-weight: bold;
-            padding: 4px 12px; border-radius: 20px;
-        }
-
-        .word-main { font-size: 3.5rem; font-weight: 900; color: white; margin: 15px 0; }
-        .word-sub { font-size: 1.4rem; color: var(--text-sub); margin-bottom: 30px; cursor: pointer; min-height: 1.5em; }
-        .word-sub.blur { filter: blur(15px); opacity: 0.2; }
-
-        .tag-chip {
-            font-size: 0.7rem; padding: 3px 8px; border: 1px solid #233554;
-            border-radius: 5px; cursor: pointer; color: var(--text-sub); display: inline-block; margin: 2px;
-        }
-        .tag-chip.active { background: var(--accent); color: #000; border-color: var(--accent); }
-
-        .btn {
-            background: transparent; border: 1px solid var(--accent); color: var(--accent);
-            padding: 10px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s;
-        }
-        .btn.gold { border-color: var(--gold); color: var(--gold); }
-        .btn.gold.active { background: var(--gold); color: #000; }
-        .btn:hover { background: rgba(100, 255, 218, 0.1); }
-
+        .btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn.active { background: var(--accent); color: #000; }
+        .btn.gold.filled { background: var(--gold); color: #000; border-color: var(--gold); }
         .menu-toggle { position: fixed; top: 20px; left: 20px; z-index: 1000; }
     </style>
 </head>
 <body>
 
     <nav id="sidebar">
-        <div class="sidebar-header">
-            <img src="IMG_4521.jpeg" class="app-icon" alt="icon">
-            <h3 style="margin:0; font-size:0.9rem">MASTER 3000</h3>
-            <button class="btn" style="border:none; font-size:1.5rem" onclick="toggleSidebar()">×</button>
+        <div style="padding:20px; background:#112240; display:flex; align-items:center; gap:10px;">
+            <img src="IMG_4521.jpeg" style="width:40px; height:40px; border-radius:8px; object-fit:cover;">
+            <h3 style="font-size:0.9rem; margin:0;">MASTER 3000</h3>
         </div>
-
         <div class="sidebar-scroll">
-            <div class="exam-countdown">
-                <div style="font-size:0.7rem">入試本番まで</div>
-                <div class="countdown-days" id="exam-days">---</div>
-                <div style="font-size:0.6rem">DAYS LEFT</div>
+            <div class="countdown-box">
+                <div style="font-size:0.7rem">入試まであと</div>
+                <div class="days-num" id="exam-days">---</div>
+                <div style="font-size:0.6rem">DAYS</div>
             </div>
 
+            <button class="btn" style="width:100%; margin-bottom:10px;" onclick="switchView('study')">学習カード画面</button>
+            <button class="btn" style="width:100%; margin-bottom:20px;" onclick="switchView('list')">全単語リスト管理</button>
+            
             <div class="search-container">
-                <input type="text" id="search-box" class="search-input" placeholder="辞書検索..." oninput="showSuggest(this.value)">
+                <input type="text" id="search-box" class="search-input" placeholder="検索してジャンプ..." oninput="showSuggest(this.value)">
                 <div id="suggest-list"></div>
             </div>
 
-            <p style="font-size:0.8rem">モード設定</p>
-            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">
-                <button class="btn" id="m-norm" onclick="setMode('normal')">英→和</button>
-                <button class="btn" id="m-rev" onclick="setMode('reverse')">和→英 (和訳モード)</button>
-                <button class="btn" id="m-unlearned" onclick="toggleUnlearned()">未習得のみ: OFF</button>
-                <button class="btn" id="m-mine" onclick="toggleMine()">地雷モード: OFF</button>
-            </div>
+            <p style="font-size:0.8rem">絞り込みタグ</p>
+            <div id="tag-filters" style="margin-bottom:20px;"></div>
 
-            <p style="font-size:0.8rem">タグ絞り込み</p>
-            <div id="tag-filters"></div>
-            
-            <button class="btn" style="width:100%; margin-top:20px; font-size:0.7rem;" onclick="resetProgress()">進捗リセット</button>
+            <p style="font-size:0.8rem">設定</p>
+            <button class="btn" id="m-rev" style="width:100%; margin-bottom:10px;" onclick="toggleReverseMode()">和訳モード: OFF</button>
         </div>
     </nav>
 
     <button id="open-btn" class="btn menu-toggle" style="display:none" onclick="toggleSidebar()">☰ MENU</button>
 
-    <main id="main">
-        <div class="card" id="main-card">
-            <div id="badge" class="status-badge">LEARNING</div>
-            <div id="card-tags" style="margin-bottom:15px;"></div>
-            <div class="word-main" id="display-main">Loading...</div>
-            <div class="word-sub blur" id="display-sub" onclick="this.classList.remove('blur')">Tap to reveal</div>
-            
-            <div style="display:flex; gap:12px; justify-content:center; margin-top:20px;">
-                <button class="btn" onclick="move(-1)">PREV</button>
-                <button class="btn gold" id="gotit-btn" onclick="toggleMastery()">GOT IT!</button>
-                <button class="btn" onclick="move(1)">NEXT</button>
+    <div id="main">
+        <section id="view-study" class="active">
+            <div class="card-container">
+                <div class="card" id="main-card">
+                    <div id="card-tags" style="margin-bottom:10px;"></div>
+                    <div class="word-main" id="display-main">Loading...</div>
+                    <div class="word-sub blur" id="display-sub" onclick="this.classList.remove('blur')">Tap to reveal</div>
+                    <div style="display:flex; gap:10px; justify-content:center;">
+                        <button class="btn" onclick="move(-1)">PREV</button>
+                        <button class="btn" id="card-gotit" onclick="toggleMasteryCard()">GOT IT!</button>
+                        <button class="btn" onclick="move(1)">NEXT</button>
+                    </div>
+                </div>
             </div>
-            <div style="margin-top:20px; font-size:0.8rem; color:var(--text-sub)" id="prog-stats">0 / 3000</div>
-        </div>
-    </main>
+        </section>
+
+        <section id="view-list">
+            <div class="list-header">
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <button class="btn active" id="tab-all" onclick="setListFilter('all')">すべて</button>
+                    <button class="btn" id="tab-learned" onclick="setListFilter('learned')">習得済</button>
+                    <button class="btn" id="tab-unlearned" onclick="setListFilter('unlearned')">未習得</button>
+                </div>
+                <div style="font-size:0.8rem;">表示中: <span id="list-count">0</span> 件</div>
+            </div>
+            <div id="word-list-container"></div>
+        </section>
+    </div>
 
     <script src="data.js"></script>
     <script>
-        // 1. Data & State
         let currentIdx = parseInt(localStorage.getItem('study_pos')) || 0;
-        let studyMode = 'normal'; // normal / reverse
-        let activeTags = new Set();
-        let onlyUnlearned = false;
-        let isMineMode = false;
         let masteredMap = JSON.parse(localStorage.getItem('mastered_words')) || {};
-        let filteredList = [...words];
+        let activeTags = new Set();
+        let listFilter = 'all';
+        let isReverse = false;
 
         // 入試日 (例: 2027年1月15日)
         const EXAM_DATE = new Date('2027-01-15T00:00:00');
 
-        // 2. Logic
         function toggleSidebar() {
             const sb = document.getElementById('sidebar');
             sb.classList.toggle('hidden');
             document.getElementById('main').classList.toggle('expanded');
             document.getElementById('open-btn').style.display = sb.classList.contains('hidden') ? 'block' : 'none';
+        }
+
+        function switchView(v) {
+            document.getElementById('view-study').classList.toggle('active', v === 'study');
+            document.getElementById('view-list').classList.toggle('active', v === 'list');
+            if(v === 'list') renderList();
+            else renderCard();
         }
 
         function updateCountdown() {
@@ -186,12 +150,10 @@
             const list = document.getElementById('suggest-list');
             const q = val.toLowerCase().trim();
             if(!q) { list.style.display='none'; return; }
-            
-            const matches = words.filter(w => w.w.toLowerCase().includes(q) || w.m.includes(q)).slice(0, 15);
+            const matches = words.filter(w => w.w.toLowerCase().includes(q) || w.m.includes(q)).slice(0, 10);
             list.innerHTML = matches.map(m => `
                 <div class="suggest-item" onclick="jumpTo('${m.w}')">
-                    <div style="color:var(--accent)">${m.w}</div>
-                    <div style="font-size:0.7rem; color:var(--text-sub)">${m.m}</div>
+                    <b>${m.w}</b> <span style="color:var(--text-sub)">- ${m.m}</span>
                 </div>
             `).join('');
             list.style.display = 'block';
@@ -203,109 +165,103 @@
                 currentIdx = idx;
                 document.getElementById('search-box').value = '';
                 document.getElementById('suggest-list').style.display = 'none';
-                applyFilters();
+                switchView('study');
             }
         }
 
-        function setMode(m) {
-            studyMode = m;
-            document.getElementById('m-norm').classList.toggle('active', m === 'normal');
-            document.getElementById('m-rev').classList.toggle('active', m === 'reverse');
-            render();
+        function toggleReverseMode() {
+            isReverse = !isReverse;
+            document.getElementById('m-rev').textContent = isReverse ? '和訳モード: ON' : '和訳モード: OFF';
+            document.getElementById('m-rev').classList.toggle('active', isReverse);
+            renderCard();
         }
 
-        function toggleUnlearned() {
-            onlyUnlearned = !onlyUnlearned;
-            const btn = document.getElementById('m-unlearned');
-            btn.textContent = onlyUnlearned ? '未習得のみ: ON' : '未習得のみ: OFF';
-            btn.classList.toggle('active', onlyUnlearned);
-            applyFilters();
-        }
+        function renderCard() {
+            const filtered = words.filter(w => activeTags.size === 0 || w.t.some(t => activeTags.has(t)));
+            if(filtered.length === 0) return;
+            if(currentIdx >= filtered.length) currentIdx = 0;
+            const data = filtered[currentIdx];
 
-        function toggleMine() {
-            isMineMode = !isMineMode;
-            const btn = document.getElementById('m-mine');
-            btn.textContent = isMineMode ? '地雷モード: ON' : '地雷モード: OFF';
-            btn.classList.toggle('active', isMineMode);
-            render();
-        }
-
-        function applyFilters() {
-            filteredList = words.filter(w => {
-                const tagMatch = activeTags.size === 0 || w.t.some(t => activeTags.has(t));
-                const unlearnedMatch = !onlyUnlearned || !masteredMap[w.w];
-                return tagMatch && unlearnedMatch;
-            });
-            if(currentIdx >= filteredList.length) currentIdx = 0;
-            render();
-        }
-
-        function toggleMastery() {
-            const w = filteredList[currentIdx].w;
-            if(masteredMap[w]) delete masteredMap[w];
-            else masteredMap[w] = true;
-            localStorage.setItem('mastered_words', JSON.stringify(masteredMap));
-            render();
-        }
-
-        function render() {
-            if(filteredList.length === 0) {
-                document.getElementById('display-main').textContent = "No Data";
-                return;
-            }
-            const data = filteredList[currentIdx];
-            const isMastered = masteredMap[data.w];
-
-            // モード表示
-            document.getElementById('display-main').textContent = studyMode === 'normal' ? data.w : data.m;
-            document.getElementById('display-sub').textContent = studyMode === 'normal' ? data.m : data.w;
+            document.getElementById('display-main').textContent = isReverse ? data.m : data.w;
+            document.getElementById('display-sub').textContent = isReverse ? data.w : data.m;
             document.getElementById('display-sub').classList.add('blur');
-
-            // 状態反映
-            const card = document.getElementById('main-card');
-            card.classList.toggle('mastered', isMastered);
-            card.classList.toggle('mine', isMineMode);
-            document.getElementById('badge').textContent = isMastered ? "MASTERED" : "LEARNING";
-            document.getElementById('badge').style.background = isMastered ? "var(--gold)" : "#233554";
-            document.getElementById('gotit-btn').classList.toggle('active', isMastered);
-
-            // タグ表示
-            document.getElementById('card-tags').innerHTML = data.t.map(t => `<span class="tag-chip active" style="cursor:default">${t}</span>`).join('');
-            document.getElementById('prog-stats').textContent = `${currentIdx + 1} / ${filteredList.length}`;
+            document.getElementById('card-tags').innerHTML = data.t.map(t => `<span class="tag-small">${t}</span>`).join('');
+            
+            const isMastered = masteredMap[data.w];
+            const btn = document.getElementById('card-gotit');
+            btn.classList.toggle('filled', isMastered);
+            btn.classList.toggle('gold', isMastered);
+            btn.textContent = isMastered ? 'MASTERED' : 'GOT IT!';
             localStorage.setItem('study_pos', currentIdx);
         }
 
+        function renderList() {
+            const container = document.getElementById('word-list-container');
+            const filtered = words.filter(w => {
+                const tagMatch = activeTags.size === 0 || w.t.some(t => activeTags.has(t));
+                const statusMatch = listFilter === 'all' || (listFilter === 'learned' ? masteredMap[w.w] : !masteredMap[w.w]);
+                return tagMatch && statusMatch;
+            });
+            document.getElementById('list-count').textContent = filtered.length;
+            container.innerHTML = filtered.map(w => `
+                <div class="word-item">
+                    <div class="word-info">
+                        <div style="font-weight:bold; font-size:1.1rem;">${w.w}</div>
+                        <div style="color:var(--text-sub); font-size:0.9rem;">${w.m}</div>
+                        <div style="margin-top:5px;">${w.t.map(t => `<span class="tag-small">${t}</span>`).join('')}</div>
+                    </div>
+                    <button class="btn ${masteredMap[w.w] ? 'gold filled' : ''}" onclick="toggleMasteryList('${w.w}', this)">
+                        ${masteredMap[w.w] ? '済' : '未'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function toggleMasteryCard() {
+            const filtered = words.filter(w => activeTags.size === 0 || w.t.some(t => activeTags.has(t)));
+            const w = filtered[currentIdx].w;
+            toggleMasteryRaw(w);
+            renderCard();
+        }
+
+        function toggleMasteryList(w, btn) {
+            toggleMasteryRaw(w);
+            renderList();
+        }
+
+        function toggleMasteryRaw(w) {
+            if(masteredMap[w]) delete masteredMap[w];
+            else masteredMap[w] = true;
+            localStorage.setItem('mastered_words', JSON.stringify(masteredMap));
+        }
+
         function move(s) {
-            if(isMineMode && s > 0 && Math.random() < 0.2) {
-                currentIdx = Math.floor(Math.random() * filteredList.length);
-            } else {
-                currentIdx = (currentIdx + s + filteredList.length) % filteredList.length;
-            }
-            render();
+            const filtered = words.filter(w => activeTags.size === 0 || w.t.some(t => activeTags.has(t)));
+            currentIdx = (currentIdx + s + filtered.length) % filtered.length;
+            renderCard();
         }
 
         function init() {
             const tags = new Set();
             words.forEach(w => w.t.forEach(t => tags.add(t)));
             document.getElementById('tag-filters').innerHTML = Array.from(tags).sort().map(t => `
-                <span class="tag-chip" onclick="this.classList.toggle('active'); toggleActiveTag('${t}')">${t}</span>
+                <span class="tag-small" style="cursor:pointer; display:inline-block; margin:3px;" onclick="this.classList.toggle('active'); toggleTag('${t}')">${t}</span>
             `).join('');
             updateCountdown();
-            setMode('normal');
-            applyFilters();
+            renderCard();
         }
 
-        function toggleActiveTag(t) {
+        function toggleTag(t) {
             if(activeTags.has(t)) activeTags.delete(t);
             else activeTags.add(t);
-            applyFilters();
+            renderCard();
+            if(document.getElementById('view-list').classList.contains('active')) renderList();
         }
 
-        function resetProgress() {
-            if(confirm("習得記録と現在位置をリセットしますか？")) {
-                localStorage.clear();
-                location.reload();
-            }
+        function setListFilter(f) {
+            listFilter = f;
+            ['all', 'learned', 'unlearned'].forEach(id => document.getElementById('tab-'+id).classList.toggle('active', id === f));
+            renderList();
         }
 
         window.onload = init;
